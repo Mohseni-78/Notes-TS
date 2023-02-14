@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router";
 import CreateNote from "./components/CreateNote";
 import EditNote from "./components/EditNote";
 import NotesList from "./components/NotesList";
+import ShowNote from "./components/ShowNote";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Route path="/" index element={<NotesList />} />
         <Route path="/create" element={<CreateNote />} />
         <Route path="/edit" element={<EditNote />} />
+        <Route path="/show" element={<ShowNote/>} />
       </Routes>
     </div>
   );

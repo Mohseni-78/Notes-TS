@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Note = () => {
   return (
-    <Link to="edit">
+    <Link to="/show">
       <div className="text-center border w-64 h-64 flex flex-col justify-center items-center  shadow-md">
         <p>Title</p>
         <div className="flex mt-1">
