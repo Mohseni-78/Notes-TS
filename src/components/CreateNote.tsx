@@ -36,7 +36,7 @@ const CreateNote: FC<TpropsCNote> = ({ onSubmit, onAddTag, availableTags }) => {
         </Link>
       </div>
       {/* Form */}
-      <form action="#" className="p-10" onSubmit={handleSubmit}>
+      <form  className="p-10" onSubmit={handleSubmit}>
         <div className="mb-5 inline-block">
           <label htmlFor="title" className="block mb-1">
             Title
@@ -58,7 +58,7 @@ const CreateNote: FC<TpropsCNote> = ({ onSubmit, onAddTag, availableTags }) => {
               return { label: tag.label, value: tag.id };
             })}
             onCreateOption={(label) => {
-              const newTag = { id: uuidV4(), label };
+              const newTag = { id: uuidV4(), label:label };
               onAddTag(newTag);
               setSelectedTags((prev) => [...prev, newTag]);
             }}
@@ -66,7 +66,7 @@ const CreateNote: FC<TpropsCNote> = ({ onSubmit, onAddTag, availableTags }) => {
             value={selectedTags.map((tag) => {
               return { label: tag.label, value: tag.id };
             })}
-            onChange={(tags) => {
+            onChange={(tags) => {              
               setSelectedTags(
                 tags.map((tag) => {
                   return { label: tag.label, id: tag.value };
