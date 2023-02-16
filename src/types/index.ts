@@ -27,6 +27,12 @@ export type RawNoteData = {
   tagIds: string[];
 };
 
+export type simplifiedNote = {
+  tags: Ttag[];
+  title: string;
+  id: string;
+};
+
 export type TpropsNote = Omit<INoteProps, "notes">;
 export type TpropsNotes = Omit<INoteProps, "note" | "key">;
 export type Tprev = Omit<INoteProps, "note" | "key">;
