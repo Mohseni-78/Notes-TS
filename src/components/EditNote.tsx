@@ -1,6 +1,34 @@
-import React from "react";
+import  { useState, useRef, FormEvent } from "react";
+import { INoteData, Ttag } from "../types";
+import { useNote } from "./NoteLayout";
+import CreatableReactSelect from "react-select/creatable";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidV4 } from "uuid";
 
-const EditNote = () => {
+type TPropsENote = {
+  onUpdate: (id: string, data: INoteData) => void;
+  onAddTag: (tag: Ttag) => void;
+  availableTags: Ttag[];
+};
+
+const EditNote = ({ onUpdate, onAddTag, availableTags }: TPropsENote) => {
+  const note = useNote();
+  const [selectedTags, setSelectedTags] = useState<Ttag[]>(note.tags);
+
+  const titleRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    onUpdate(note.id, {
+      title: titleRef.current!.value,
+      description: descriptionRef.current!.value,
+      tags: selectedTags,
+    });
+    navigate("..");
+  };
+
   return (
     <div className="container p-10">
       <div className="flex items-center justify-between">
@@ -15,7 +43,7 @@ const EditNote = () => {
         </button>
       </div>
       {/* Form */}
-      <form action="#" className="p-10">
+      <form action="#" className="p-10" onSubmit={handleSubmit}>
         <div className="mb-5 inline-block">
           <label htmlFor="title" className="block mb-1">
             Title
@@ -25,16 +53,31 @@ const EditNote = () => {
             id="title"
             placeholder="title..."
             className="w-96 p-2 border"
+            defaultValue={note.title}
+            ref={titleRef}
           />
         </div>
-        <div className="mb-5 inline-block ml-10">
-          <label htmlFor="tags" className="block mb-1">
-            Tags
-          </label>
-          <select name="tags" id="tags" className=" p-2 border w-96">
-            <option value="test">test</option>
-          </select>
-        </div>
+        <CreatableReactSelect
+          options={availableTags.map((tag) => {
+            return { label: tag.label, value: tag.id };
+          })}
+          onCreateOption={(label) => {
+            const newTag = { id: uuidV4(), label };
+            onAddTag(newTag);
+            setSelectedTags((prev) => [...prev, newTag]);
+          }}
+          isMulti
+          value={selectedTags.map((tag) => {
+            return { label: tag.label, value: tag.id };
+          })}
+          onChange={(tags) => {
+            setSelectedTags(
+              tags.map((tag) => {
+                return { label: tag.label, id: tag.value };
+              })
+            );
+          }}
+        />
         <div className="mt-4">
           <label htmlFor="description" className="block mb-1">
             Description
@@ -44,6 +87,9 @@ const EditNote = () => {
             name="description"
             id="description"
             placeholder="description..."
+            defaultValue={note.description}
+            ref={descriptionRef}
+            rows={15}
           ></textarea>
         </div>
         <div className="flex mt-4">
